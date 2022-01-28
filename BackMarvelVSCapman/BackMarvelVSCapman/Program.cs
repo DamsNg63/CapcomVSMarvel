@@ -1,3 +1,7 @@
+using BackMarvelVSCapman.Business.Services;
+using BackMarvelVSCapman.DAL;
+using BackMarvelVSCapman.DAL.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<Context>();
+builder.Services.AddSingleton<Context>();
+builder.Services.AddSingleton<ICharacterRepository, CharacterRepository>();
+builder.Services.AddSingleton<ITeamRepository, TeamRepository>();
+builder.Services.AddScoped<ICharacterService, CharacterService>();
 
 var app = builder.Build();
 
