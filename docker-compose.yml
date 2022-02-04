@@ -1,16 +1,16 @@
 version: '3'
 services:
-  BackMarvelVSCapman:
+  backmarvelvscapman:
     image: backmarvelvscapman:latest
-    container_name: BackMarvelVSCapman
+    container_name: backmarvelvscapman
     restart: unless-stopped
     networks:
       - proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.BackMarvelVSCapman.rule=Host(`BackMarvelVSCapman.douard.me`)"
-      - "traefik.http.routers.BackMarvelVSCapman.service=BackMarvelVSCapman"
-      - "traefik.http.services.BackMarvelVSCapman.loadbalancer.server.port=80"
+      - "traefik.http.routers.backmarvelvscapman.rule=Host(`backmarvelvscapman.douard.me`)"
+      - "traefik.http.routers.backmarvelvscapman.service=backmarvelvscapman"
+      - "traefik.http.services.backmarvelvscapman.loadbalancer.server.port=80"
       - "traefik.docker.network=proxy"
 
 networks:
