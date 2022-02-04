@@ -1,7 +1,7 @@
 version: '3'
 services:
   BackMarvelVSCapman:
-    image: BackMarvelVSCapman:latest
+    image: backmarvelvscapman:latest
     container_name: BackMarvelVSCapman
     restart: unless-stopped
     networks:
