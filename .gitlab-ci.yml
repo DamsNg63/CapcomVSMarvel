@@ -9,4 +9,4 @@ deploy-job:      # This job runs in the deploy stage.
     - docker build -t BackMarvelVSCapman:latest ./BackMarvelVSCapman/BackMarvelVSCapman
     - docker-compose up -d
   only:
-    develop
+    - develop
