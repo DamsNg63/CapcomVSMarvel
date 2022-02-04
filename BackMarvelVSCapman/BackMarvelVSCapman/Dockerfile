@@ -6,7 +6,9 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+RUN ls
 WORKDIR /src
+RUN ls
 COPY ["BackMarvelVSCapman/BackMarvelVSCapman.csproj", "BackMarvelVSCapman/"]
 COPY ["BackMarvelVSCapman.Business/BackMarvelVSCapman.Business.csproj", "BackMarvelVSCapman.Business/"]
 COPY ["BackMarvelVSCapman.DTO/BackMarvelVSCapman.DTO.csproj", "BackMarvelVSCapman.DTO/"]
