@@ -10,3 +10,5 @@ deploy-job:      # This job runs in the deploy stage.
     - docker-compose up -d
   only:
     - develop
+  tags:
+    - vps
