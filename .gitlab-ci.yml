@@ -7,4 +7,6 @@ deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
     - docker build -t BackMarvelVSCapman:latest ./BackMarvelVSCapman/BackMarvelVSCapman
-    - docker run -d -p 4444:80 BackMarvelVSCapman:latest 
+    - docker-compose up -d
+  only:
+    develop
