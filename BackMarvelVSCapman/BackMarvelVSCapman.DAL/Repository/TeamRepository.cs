@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BackMarvelVSCapman.DAL.Repository
 {
-    public class TeamRepository : BaseCRUDRepository<Team>, ITeamRepository
+    public class TeamRepository : BaseCRUDRepository<Team>
     {
         public TeamRepository(Context context) : base(context, context.Teams)
         {

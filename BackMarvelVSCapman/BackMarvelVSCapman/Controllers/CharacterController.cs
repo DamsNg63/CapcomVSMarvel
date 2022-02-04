@@ -1,4 +1,5 @@
-﻿using BackMarvelVSCapman.Business.Services;
+﻿using AutoMapper;
+using BackMarvelVSCapman.Business.Services;
 using BackMarvelVSCapman.DAL.Model;
 using BackMarvelVSCapman.DAL.Repository;
 using BackMarvelVSCapman.DTO;
@@ -10,20 +11,20 @@ namespace BackMarvelVSCapman.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CharacterController : ControllerBase
+    public class CharacterController : BaseController
     {
         private readonly ICharacterService _characterService;
-        private readonly ICharacterRepository _characterRepository;
-        public CharacterController(ICharacterRepository characterRepository, ICharacterService characterService)
+        private readonly IRepository<Character> _characterRepository;
+        public CharacterController(IRepository<Character> characterRepository, ICharacterService characterService, IMapper mapper) : base(mapper)
         {
             _characterService = characterService;
             _characterRepository = characterRepository;
         }
         // GET: api/<CharacterController>
         [HttpGet]
-        public IEnumerable<Character> Get()
+        public IEnumerable<CharacterDto> Get()
         {
-            return _characterRepository.GetAll();
+            return _mapper.Map<IEnumerable<Character>, IEnumerable<CharacterDto>>(_characterRepository.GetAll());
         }
 
         // GET api/<CharacterController>/5

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BackMarvelVSCapman.DAL.Repository
 {
-    public class CharacterRepository : BaseCRUDRepository<Character>, ICharacterRepository
+    public class CharacterRepository : BaseCRUDRepository<Character>
     {
         public CharacterRepository(Context dbContext) : base(dbContext, dbContext.Characters)
         {

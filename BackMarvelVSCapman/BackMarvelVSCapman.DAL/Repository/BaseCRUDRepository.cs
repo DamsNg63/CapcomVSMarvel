@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BackMarvelVSCapman.DAL.Repository
 {
-    public abstract class BaseCRUDRepository<T> where T : class
+    public abstract class BaseCRUDRepository<T> : IRepository<T> where T : class
     {
         private Context _dbContext;
         private DbSet<T> _dbSet;

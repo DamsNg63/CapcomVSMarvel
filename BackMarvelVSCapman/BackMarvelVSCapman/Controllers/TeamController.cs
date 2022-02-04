@@ -1,5 +1,7 @@
-﻿using BackMarvelVSCapman.DAL.Model;
+﻿using AutoMapper;
+using BackMarvelVSCapman.DAL.Model;
 using BackMarvelVSCapman.DAL.Repository;
+using BackMarvelVSCapman.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -8,19 +10,19 @@ namespace BackMarvelVSCapman.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeamController : ControllerBase
+    public class TeamController : BaseController
     {
-        private readonly ITeamRepository _teamRepository;
+        private readonly IRepository<Team> _teamRepository;
 
-        public TeamController(ITeamRepository teamRepository)
+        public TeamController(IRepository<Team> teamRepository, IMapper mapper) : base(mapper)
         {
             _teamRepository = teamRepository;
         }
         // GET: api/<TeamController>
         [HttpGet]
-        public IEnumerable<Team> Get()
+        public IEnumerable<TeamDto> Get()
         {
-            return _teamRepository.GetAll();
+            return _mapper.Map<IEnumerable<Team>, IEnumerable<TeamDto>>(_teamRepository.GetAll());
         }
 
         // GET api/<TeamController>/5

@@ -1,20 +1,35 @@
+using AutoMapper;
 using BackMarvelVSCapman.Business.Services;
 using BackMarvelVSCapman.DAL;
+using BackMarvelVSCapman.DAL.Model;
 using BackMarvelVSCapman.DAL.Repository;
+using BackMarvelVSCapman.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<Context>();
 builder.Services.AddSingleton<Context>();
-builder.Services.AddSingleton<ICharacterRepository, CharacterRepository>();
-builder.Services.AddSingleton<ITeamRepository, TeamRepository>();
+builder.Services.AddSingleton<IRepository<Character>, CharacterRepository>();
+builder.Services.AddSingleton<IRepository<Team>, TeamRepository>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
+
+// Automapper
+#region Automapper
+var config = new MapperConfiguration(cfg =>
+{
+    cfg.CreateMap<Character, CreateChraraterDto>();
+    cfg.CreateMap<Character, CharacterDto>();
+    cfg.CreateMap<Team, TeamDto>();
+});
+var mapper = new Mapper(config);
+
+builder.Services.AddSingleton<IMapper>(mapper); 
+#endregion
 
 var app = builder.Build();
 

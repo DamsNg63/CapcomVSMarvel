@@ -11,9 +11,9 @@ namespace BackMarvelVSCapman.Business.Services
 {
     public class CharacterService : ICharacterService
     {
-        private readonly ICharacterRepository _characterRepository;
+        private readonly IRepository<Character> _characterRepository;
 
-        public CharacterService(ICharacterRepository characterRepository)
+        public CharacterService(IRepository<Character> characterRepository)
         {
             _characterRepository = characterRepository;
         }
