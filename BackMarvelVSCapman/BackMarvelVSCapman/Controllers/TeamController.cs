@@ -27,9 +27,9 @@ namespace BackMarvelVSCapman.Controllers
 
         // GET api/<TeamController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public TeamDto Get(int id)
         {
-            return "value";
+            return _mapper.Map<Team, TeamDto>(_teamRepository.Get(id));
         }
 
         // POST api/<TeamController>

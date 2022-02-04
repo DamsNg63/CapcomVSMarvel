@@ -29,9 +29,9 @@ namespace BackMarvelVSCapman.Controllers
 
         // GET api/<CharacterController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public CharacterDto Get(int id)
         {
-            return "value";
+            return _mapper.Map<Character, CharacterDto>(_characterRepository.Get(id));
         }
 
         // POST api/<CharacterController>

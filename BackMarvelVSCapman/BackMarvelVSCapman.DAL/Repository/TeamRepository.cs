@@ -13,5 +13,11 @@ namespace BackMarvelVSCapman.DAL.Repository
         public TeamRepository(Context context) : base(context, context.Teams)
         {
         }
+
+        public override Team Get(int id)
+        {
+            // TODO: exception if not found
+            return _dbSet.First(x => x.TeamId == id);
+        }
     }
 }

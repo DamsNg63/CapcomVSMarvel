@@ -1,4 +1,5 @@
 using AutoMapper;
+using BackMarvelVSCapman.Business.Gameplay;
 using BackMarvelVSCapman.Business.Services;
 using BackMarvelVSCapman.DAL;
 using BackMarvelVSCapman.DAL.Model;
@@ -17,6 +18,18 @@ builder.Services.AddSingleton<Context>();
 builder.Services.AddSingleton<IRepository<Character>, CharacterRepository>();
 builder.Services.AddSingleton<IRepository<Team>, TeamRepository>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
+builder.Services.AddSingleton<IGameManager, GameManager>();
+
+#region Session related
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+}); 
+#endregion
 
 // Automapper
 #region Automapper
@@ -24,6 +37,7 @@ var config = new MapperConfiguration(cfg =>
 {
     cfg.CreateMap<Character, CreateChraraterDto>();
     cfg.CreateMap<Character, CharacterDto>();
+    cfg.CreateMap<Game, GameDto>();
     cfg.CreateMap<Team, TeamDto>();
 });
 var mapper = new Mapper(config);
@@ -45,5 +59,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseSession();
 
 app.Run();

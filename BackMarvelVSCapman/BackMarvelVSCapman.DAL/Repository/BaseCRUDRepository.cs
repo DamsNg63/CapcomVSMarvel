@@ -9,8 +9,8 @@ namespace BackMarvelVSCapman.DAL.Repository
 {
     public abstract class BaseCRUDRepository<T> : IRepository<T> where T : class
     {
-        private Context _dbContext;
-        private DbSet<T> _dbSet;
+        protected Context _dbContext;
+        protected DbSet<T> _dbSet;
         public BaseCRUDRepository(Context dbContext, DbSet<T> dbSet)
         {
             _dbContext = dbContext;
@@ -21,6 +21,8 @@ namespace BackMarvelVSCapman.DAL.Repository
         {
             return _dbSet.AsEnumerable();
         }
+
+        public abstract T Get(int id);
 
         public void Add(T elem)
         {

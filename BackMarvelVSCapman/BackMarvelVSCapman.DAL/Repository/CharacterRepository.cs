@@ -13,5 +13,11 @@ namespace BackMarvelVSCapman.DAL.Repository
         public CharacterRepository(Context dbContext) : base(dbContext, dbContext.Characters)
         {
         }
+
+        public override Character Get(int id)
+        {
+            // TODO: exception if not found
+            return _dbSet.First(x => x.CharacterId == id);
+        }
     }
 }

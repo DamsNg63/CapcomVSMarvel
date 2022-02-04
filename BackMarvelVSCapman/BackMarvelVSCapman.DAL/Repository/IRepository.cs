@@ -9,6 +9,7 @@ namespace BackMarvelVSCapman.DAL.Repository
     public interface IRepository<T> where T : class
     {
         public IEnumerable<T> GetAll();
+        public T Get(int id);
         public void Add(T team);
         public void Update(T team);
         public void Delete(T team);
