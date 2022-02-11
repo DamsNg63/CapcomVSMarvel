@@ -18,10 +18,7 @@ namespace BackMarvelVSCapman.Business.Gameplay
 
         public Game CreateGame(string sessionId)
         {
-            Player p1 = new();
-            p1.SessionId = sessionId;
-            
-            Game game = new(p1, new Player());
+            Game game = new(new Player(), new Player());
             Add(game);
 
             return game;
