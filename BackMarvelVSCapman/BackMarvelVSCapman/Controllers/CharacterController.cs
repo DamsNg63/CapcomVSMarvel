@@ -25,9 +25,9 @@ namespace BackMarvelVSCapman.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<CharacterDto>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var result = _mapper.Map<IEnumerable<Character>, IEnumerable<CharacterDto>>(_characterRepository.GetAll());
+            var result = _mapper.Map<IEnumerable<Character>, IEnumerable<CharacterDto>>(await _characterRepository.GetAll());
             return result.Any() ? Ok(result) : NoContent();
         }
 
@@ -35,11 +35,11 @@ namespace BackMarvelVSCapman.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(CharacterDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
             try
             {
-                return Ok(_mapper.Map<Character, CharacterDto>(_characterRepository.Get(id)));
+                return Ok(_mapper.Map<Character, CharacterDto>(await _characterRepository.Get(id)));
             }
             catch (Exception)
             {
@@ -51,27 +51,27 @@ namespace BackMarvelVSCapman.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public IActionResult Post(CreateChraraterDto value)
+        public async Task<IActionResult> Post(CreateChraraterDto value)
         {   
-            return _characterService.Create(value) ? Created("#", value) : Conflict(value);
+            return await _characterService.Create(value) ? Created("#", value) : Conflict(value);
         }
 
         // PUT api/<CharacterController>/5
         [HttpPut("{id}")]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public IActionResult Put([FromBody] Character value)
+        public async Task<IActionResult> Put([FromBody] Character value)
         {
-            return _characterRepository.Update(value) ? Accepted() : Conflict(value);
+            return await _characterRepository.Update(value) ? Accepted() : Conflict(value);
         }
 
         // DELETE api/<CharacterController>/5
         [HttpDelete("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult Delete([FromBody] Character value)
+        public async Task<IActionResult> Delete(int id)
         {
-            return _characterRepository.Delete(value) ? Ok() : BadRequest(value);
+            return await _characterRepository.Delete(id) ? Ok() : BadRequest(id);
         }
     }
 }

@@ -85,14 +85,14 @@ namespace BackMarvelVSCapman.Controllers
         [HttpPut("select")]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public IActionResult SelectCharacters(Guid playerId, string gameId, int id1, int id2, int id3)
+        public async Task<IActionResult> SelectCharacters(Guid playerId, string gameId, int id1, int id2, int id3)
         {
             try
             {
                 return Accepted(_gameManager.Games.First(x => x.GameId.ToString() == gameId).Find(playerId).Characters = (
-                        _characterRepository.Get(id1),
-                        _characterRepository.Get(id2),
-                        _characterRepository.Get(id3)
+                        await _characterRepository.Get(id1),
+                        await _characterRepository.Get(id2),
+                        await _characterRepository.Get(id3)
                     )
                 );
             }

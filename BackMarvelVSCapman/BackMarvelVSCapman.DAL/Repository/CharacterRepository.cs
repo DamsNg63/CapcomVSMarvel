@@ -14,10 +14,10 @@ namespace BackMarvelVSCapman.DAL.Repository
         {
         }
 
-        public override Character Get(int id)
+        public override async Task<Character> Get(int id)
         {
             // TODO: exception if not found
-            return _dbSet.First(x => x.CharacterId == id);
+            return await _dbSet.FirstAsync(x => x.CharacterId == id);
         }
     }
 }
