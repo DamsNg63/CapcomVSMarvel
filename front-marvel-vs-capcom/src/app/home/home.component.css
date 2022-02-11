@@ -16,11 +16,6 @@
     font-size: 50px;
     margin: 20px;
     text-decoration: none;
-    color: #d1d1d1;
-}
-
-.secondary-button:hover, .secondary-button:focus {
-    color: white;
 }
 
 .primary-button {
