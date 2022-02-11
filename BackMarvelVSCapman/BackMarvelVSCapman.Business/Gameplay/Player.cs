@@ -10,7 +10,6 @@ namespace BackMarvelVSCapman.Business.Gameplay
     public class Player
     {
         public Guid PlayerId { get; }
-        public string SessionId { get; set; } = string.Empty;
 
         public (Character C1, Character C2, Character C3)? Characters { get; set; }
 

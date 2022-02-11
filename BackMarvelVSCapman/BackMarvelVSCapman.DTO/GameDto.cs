@@ -11,5 +11,7 @@ namespace BackMarvelVSCapman.DTO
     {
         [Required]
         public Guid GameId { get; set; }
+        [Required]
+        public Guid PlayerID { get; set; }
     }
 }

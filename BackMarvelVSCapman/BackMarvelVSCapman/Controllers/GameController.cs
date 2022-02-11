@@ -20,26 +20,61 @@ namespace BackMarvelVSCapman.Controllers
             _characterRepository = characterRepository;
         }
 
-        [HttpPost]
+        [HttpGet("canplay")]
+        public bool CanPlay(Guid playerId, string gameId)
+        {
+            var game = FindById(gameId);
+            return game.CanPlay(playerId);
+        }
+
+        [HttpGet("board")]
+        public BoardDto getBorad(string gameId)
+        {
+            var game = FindById(gameId);
+            return new BoardDto { Board = game.getBoard().Cast<int>().ToArray(), NbCol = Board.NB_COL, NbLin = Board.NB_LIN };
+        }
+
+        [HttpPost("create")]
         public GameDto CreateGame()
         {
-            return _mapper.Map<Game, GameDto>(_gameManager.CreateGame(HttpContext.Session.Id));
+            var game = _gameManager.CreateGame(HttpContext.Session.Id);
+            return new GameDto { GameId = game.GameId, PlayerID = game.Players.P1.PlayerId };
         }
 
         [HttpPut("join")]
-        public void JoinGame(string gameId)
+        public GameDto JoinGame(string gameId)
         {
-            _gameManager.Games.First(x => x.GameId.ToString() == gameId).Players.P2.SessionId = HttpContext.Session.Id;
+            var game = _gameManager.Games.First(x => x.GameId.ToString() == gameId);
+            game.P2Join();
+            return new GameDto { GameId = game.GameId, PlayerID = game.Players.P2.PlayerId };
         }
 
         [HttpPut("select")]
-        public void SelectCharacters(string gameId, int id1, int id2, int id3)
+        public void SelectCharacters(Guid playerId, string gameId, int id1, int id2, int id3)
         {
-            _gameManager.Games.First(x => x.GameId.ToString() == gameId).Find(HttpContext.Session.Id).Characters = (
+            _gameManager.Games.First(x => x.GameId.ToString() == gameId).Find(playerId).Characters = (
                 _characterRepository.Get(id1),
                 _characterRepository.Get(id2),
                 _characterRepository.Get(id3)
             );
+        }
+
+        [HttpPut("play")]
+        public bool Play(Guid playerId, string gameId, int col)
+        {
+            return FindById(gameId).Play(playerId, col);
+        }
+
+        [HttpGet("win")]
+        public WIN_RESULT IsWinGame(string gameId)
+        {
+            return FindById(gameId).GetWinResult();
+        }
+
+        [HttpGet("ready")]
+        public bool GameReady(string gameId)
+        {
+            return FindById(gameId).IsGameReady;
         }
 
         private Game FindById(string gameId)
