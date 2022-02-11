@@ -24,22 +24,22 @@ namespace BackMarvelVSCapman.DAL.Repository
 
         public abstract T Get(int id);
 
-        public void Add(T elem)
+        public bool Add(T elem)
         {
             _dbSet.Add(elem);
-            _dbContext.SaveChanges();
+            return _dbContext.SaveChanges() > 0;
         }
 
-        public void Update(T elem)
+        public bool Update(T elem)
         {
             _dbSet.Update(elem);
-            _dbContext.SaveChanges();
+            return _dbContext.SaveChanges() > 0;
         }
 
-        public void Delete(T elem)
+        public bool Delete(T elem)
         {
             _dbSet.Remove(elem);
-            _dbContext.SaveChanges();
+            return _dbContext.SaveChanges() > 0;
         }
     }
 }

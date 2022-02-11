@@ -4,6 +4,6 @@ namespace BackMarvelVSCapman.Business.Services
 {
     public interface ICharacterService
     {
-        void Create(CreateChraraterDto createChraraterDto);
+        bool Create(CreateChraraterDto createChraraterDto);
     }
 }

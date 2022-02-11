@@ -10,8 +10,8 @@ namespace BackMarvelVSCapman.DAL.Repository
     {
         public IEnumerable<T> GetAll();
         public T Get(int id);
-        public void Add(T team);
-        public void Update(T team);
-        public void Delete(T team);
+        public bool Add(T team);
+        public bool Update(T team);
+        public bool Delete(T team);
     }
 }

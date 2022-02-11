@@ -18,9 +18,9 @@ namespace BackMarvelVSCapman.Business.Services
             _characterRepository = characterRepository;
         }
 
-        public void Create(CreateChraraterDto createChraraterDto)
+        public bool Create(CreateChraraterDto createChraraterDto)
         {
-            _characterRepository.Add(new Character
+            return _characterRepository.Add(new Character
             {
                 Name = createChraraterDto.Name,
                 Image = createChraraterDto.Image,
