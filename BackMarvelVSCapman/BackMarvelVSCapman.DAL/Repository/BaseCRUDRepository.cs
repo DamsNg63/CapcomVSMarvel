@@ -11,35 +11,36 @@ namespace BackMarvelVSCapman.DAL.Repository
     {
         protected Context _dbContext;
         protected DbSet<T> _dbSet;
+
         public BaseCRUDRepository(Context dbContext, DbSet<T> dbSet)
         {
             _dbContext = dbContext;
             _dbSet = dbSet;
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<List<T>> GetAll()
         {
-            return _dbSet.AsEnumerable();
+            return await _dbSet.ToListAsync();
         }
 
-        public abstract T Get(int id);
+        public abstract Task<T> Get(int id);
 
-        public void Add(T elem)
+        public async Task<bool> Add(T elem)
         {
             _dbSet.Add(elem);
-            _dbContext.SaveChanges();
+            return await _dbContext.SaveChangesAsync() > 0;
         }
 
-        public void Update(T elem)
+        public async Task<bool> Update(T elem)
         {
             _dbSet.Update(elem);
-            _dbContext.SaveChanges();
+            return await _dbContext.SaveChangesAsync() > 0;
         }
 
-        public void Delete(T elem)
+        public async Task<bool> Delete(int id)
         {
-            _dbSet.Remove(elem);
-            _dbContext.SaveChanges();
+            _dbSet.Remove(await Get(id));
+            return await _dbContext.SaveChangesAsync() > 0;
         }
     }
 }
