@@ -78,7 +78,7 @@ namespace BackMarvelVSCapman.Business.Gameplay
             return GameId.Equals(other?.GameId);
         }
 
-        public Jeton[] getBoard()
+        public Jeton[,] getBoard()
         {
             return _board.TabBoard;
         }
