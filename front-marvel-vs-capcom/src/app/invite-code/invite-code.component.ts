@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { delay, interval, takeWhile } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ServiceProxy } from 'src/shared/service-proxy/service-proxy';
+import { BoardDto, GameServiceProxy } from 'src/shared/service-proxy/service-proxy';
 
 @Component({
   selector: 'app-invite-code',
@@ -12,14 +12,14 @@ import { ServiceProxy } from 'src/shared/service-proxy/service-proxy';
 })
 export class InviteCodeComponent implements OnInit {
 
-  api: ServiceProxy
+  api: GameServiceProxy
   gameId = ''
   playerId = ''
   joinUrl = 'wait'
   showalert = false;
 
   constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {
-    this.api = new ServiceProxy(http, environment.baseUrl)
+    this.api = new GameServiceProxy(http, environment.baseUrl)
   }
 
   ngOnInit(): void {
@@ -28,9 +28,13 @@ export class InviteCodeComponent implements OnInit {
       this.joinUrl = environment.hostUrl + '/#/invite?gameId=' + params['gameId']
       this.playerId = params['playerId']
     })
+    if (this.playerId == undefined) {
+      this.api.join(this.gameId).subscribe(data => {
+        console.log(data.playerID)
+        this.router.navigate(['/invite'], {queryParams:{gameId: this.gameId, playerId: data.playerID}})
+      })
+    }
   }
-
-
 
   copyMessage(){
     this.showalert = true;
@@ -48,4 +52,5 @@ export class InviteCodeComponent implements OnInit {
     document.body.removeChild(selBox);
     setTimeout(() => this.showalert = false, 7000);
   }
+
 }

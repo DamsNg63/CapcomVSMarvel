@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { GameDto, ServiceProxy } from 'src/shared/service-proxy/service-proxy';
+import { GameDto, GameServiceProxy } from 'src/shared/service-proxy/service-proxy';
 
 @Component({
   selector: 'app-home',
@@ -11,10 +11,10 @@ import { GameDto, ServiceProxy } from 'src/shared/service-proxy/service-proxy';
 })
 export class HomeComponent implements OnInit {
 
-  api: ServiceProxy;
+  api: GameServiceProxy;
 
   constructor(private http: HttpClient, private router: Router) {
-    this.api = new ServiceProxy(http, environment.baseUrl);
+    this.api = new GameServiceProxy(http, environment.baseUrl);
   }
 
   ngOnInit(): void {
