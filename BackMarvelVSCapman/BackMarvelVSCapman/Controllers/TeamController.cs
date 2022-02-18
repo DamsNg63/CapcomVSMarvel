@@ -3,6 +3,7 @@ using BackMarvelVSCapman.DAL.Model;
 using BackMarvelVSCapman.DAL.Repository;
 using BackMarvelVSCapman.DTO;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,37 +21,54 @@ namespace BackMarvelVSCapman.Controllers
         }
         // GET: api/<TeamController>
         [HttpGet]
-        public IEnumerable<TeamDto> Get()
+        [ProducesResponseType(typeof(IEnumerable<TeamDto>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Get()
         {
-            return _mapper.Map<IEnumerable<Team>, IEnumerable<TeamDto>>(_teamRepository.GetAll());
+            return Ok(_mapper.Map<IEnumerable<Team>, IEnumerable<TeamDto>>(await _teamRepository.GetAll()));
         }
 
         // GET api/<TeamController>/5
         [HttpGet("{id}")]
-        public TeamDto Get(int id)
+        [ProducesResponseType(typeof(TeamDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> Get(int id)
         {
-            return _mapper.Map<Team, TeamDto>(_teamRepository.Get(id));
+            try
+            {
+                return Created("#", _mapper.Map<Team, TeamDto>(await _teamRepository.Get(id)));
+            }
+            catch (Exception)
+            {
+                return NotFound(id);
+            }
         }
 
         // POST api/<TeamController>
         [HttpPost]
-        public void Post(string value)
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        public async Task<IActionResult> Post(string value)
         {
-            _teamRepository.Add(new Team { Name = value, TeamId = 0});
+            var team = new Team { Name = value, TeamId = 0 };
+            return await _teamRepository.Add(team) ? Created("#", team) : Conflict();
         }
 
         // PUT api/<TeamController>/5
         [HttpPut("{id}")]
-        public void Put([FromBody] Team value)
+        [ProducesResponseType((int)HttpStatusCode.Accepted)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        public async Task<IActionResult> Put([FromBody] Team value)
         {
-            _teamRepository.Update(value);
+            return await _teamRepository.Update(value) ? Accepted() : Conflict();
         }
 
         // DELETE api/<TeamController>/5
         [HttpDelete("{id}")]
-        public void Delete(Team value)
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Delete(int id)
         {
-            _teamRepository.Delete(value);
+            return await _teamRepository.Delete(id) ? Ok() : BadRequest(id);
         }
     }
 }

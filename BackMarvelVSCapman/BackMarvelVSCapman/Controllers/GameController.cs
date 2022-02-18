@@ -4,6 +4,7 @@ using BackMarvelVSCapman.DAL.Model;
 using BackMarvelVSCapman.DAL.Repository;
 using BackMarvelVSCapman.DTO;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace BackMarvelVSCapman.Controllers
 {
@@ -21,60 +22,129 @@ namespace BackMarvelVSCapman.Controllers
         }
 
         [HttpGet("canplay")]
-        public bool CanPlay(Guid playerId, string gameId)
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        public IActionResult CanPlay(Guid playerId, string gameId)
         {
-            var game = FindById(gameId);
-            return game.CanPlay(playerId);
+            try
+            {
+                return Ok(FindById(gameId).CanPlay(playerId));
+            }
+            catch (Exception)
+            {
+                return Ok(false);
+            }
         }
 
         [HttpGet("board")]
-        public BoardDto getBorad(string gameId)
+        [ProducesResponseType(typeof(BoardDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public IActionResult GetBoard(string gameId)
         {
-            var game = FindById(gameId);
-            return new BoardDto { Board = game.getBoard().Cast<int>().ToArray(), NbCol = Board.NB_COL, NbLin = Board.NB_LIN };
+            try
+            {
+                return Ok(
+                        new BoardDto
+                        {
+                            Board = FindById(gameId).GetBoard().Cast<int>().ToArray(),
+                            NbCol = Board.NB_COL,
+                            NbLin = Board.NB_LIN
+                        }
+                    );
+            }
+            catch (Exception)
+            {
+                return NotFound(gameId);
+            }
         }
 
         [HttpPost("create")]
-        public GameDto CreateGame()
+        [ProducesResponseType(typeof(GameDto), (int)HttpStatusCode.Created)]
+        public IActionResult CreateGame()
         {
             var game = _gameManager.CreateGame(HttpContext.Session.Id);
-            return new GameDto { GameId = game.GameId, PlayerID = game.Players.P1.PlayerId };
+            return Created("#", new GameDto { GameId = game.GameId, PlayerID = game.Players.P1.PlayerId });
         }
 
         [HttpPut("join")]
-        public GameDto JoinGame(string gameId)
+        [ProducesResponseType(typeof(BoardDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public IActionResult JoinGame(string gameId)
         {
-            var game = _gameManager.Games.First(x => x.GameId.ToString() == gameId);
-            game.P2Join();
-            return new GameDto { GameId = game.GameId, PlayerID = game.Players.P2.PlayerId };
+            try
+            {
+                var game = _gameManager.Games.First(x => x.GameId.ToString() == gameId);
+                game.P2Join();
+                return Ok(new GameDto { GameId = game.GameId, PlayerID = game.Players.P2.PlayerId });
+            }
+            catch (Exception)
+            {
+                return NotFound(gameId);
+            }
         }
 
         [HttpPut("select")]
-        public void SelectCharacters(Guid playerId, string gameId, int id1, int id2, int id3)
+        [ProducesResponseType((int)HttpStatusCode.Accepted)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> SelectCharacters(Guid playerId, string gameId, int id1, int id2, int id3)
         {
-            _gameManager.Games.First(x => x.GameId.ToString() == gameId).Find(playerId).Characters = (
-                _characterRepository.Get(id1),
-                _characterRepository.Get(id2),
-                _characterRepository.Get(id3)
-            );
+            try
+            {
+                return Accepted(_gameManager.Games.First(x => x.GameId.ToString() == gameId).Find(playerId).Characters = (
+                        await _characterRepository.Get(id1),
+                        await _characterRepository.Get(id2),
+                        await _characterRepository.Get(id3)
+                    )
+                );
+            }
+            catch (Exception)
+            {
+                return NotFound(gameId);
+            }
         }
 
         [HttpPut("play")]
-        public bool Play(Guid playerId, string gameId, int col)
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public IActionResult Play(Guid playerId, string gameId, int col)
         {
-            return FindById(gameId).Play(playerId, col);
+            try
+            {
+                return Ok(FindById(gameId).Play(playerId, col));
+            }
+            catch (Exception)
+            {
+                return NotFound(gameId);
+            }
         }
 
         [HttpGet("win")]
-        public WIN_RESULT IsWinGame(string gameId)
+        [ProducesResponseType(typeof(WIN_RESULT), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public IActionResult IsWinGame(string gameId)
         {
-            return FindById(gameId).GetWinResult();
+            try
+            {
+                return Ok(FindById(gameId).GetWinResult());
+            }
+            catch (Exception)
+            {
+                return NotFound(gameId);
+            }
         }
 
         [HttpGet("ready")]
-        public bool GameReady(string gameId)
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public IActionResult GameReady(string gameId)
         {
-            return FindById(gameId).IsGameReady;
+            try
+            {
+                return Ok(FindById(gameId).IsGameReady);
+            }
+            catch (Exception)
+            {
+                return NotFound(gameId);
+            }
         }
 
         private Game FindById(string gameId)

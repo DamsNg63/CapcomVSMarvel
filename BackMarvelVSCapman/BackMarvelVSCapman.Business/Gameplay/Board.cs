@@ -21,29 +21,32 @@ namespace BackMarvelVSCapman.Business.Gameplay
     }
     public class Board
     {
-        public Jeton[] TabBoard { get; private set; }
+        public Jeton[,] TabBoard { get; }
         public const int NB_COL = 7;
         public const int NB_LIN = 6;
 
         public Board()
         {
-            TabBoard = new Jeton[NB_COL * NB_LIN];
-            for(int i = 0; i < NB_COL*NB_LIN; i++)
+            TabBoard = new Jeton[NB_COL, NB_LIN];
+            for(int i = 0; i < NB_COL; i++)
             {
-                TabBoard[i] = Jeton.EMPTY;
+                for(int j = 0; j < NB_LIN; j++)
+                {
+                    TabBoard[i, j] = Jeton.EMPTY;
+                }
             }
         }
 
         public bool Play(int col, bool isPlayer1)
         {
             int i = 0;
-            while(TabBoard[i * NB_COL + col] != Jeton.EMPTY && i < NB_LIN)
+            while(TabBoard[col, i] != Jeton.EMPTY && i < NB_LIN)
             {
                 i++;
             }
-            if(TabBoard[i * NB_COL + col] == Jeton.EMPTY)
+            if(i < NB_LIN)
             {
-                TabBoard[i * NB_COL + col] = isPlayer1 ? Jeton.P1 : Jeton.P2;
+                TabBoard[col, i] = isPlayer1 ? Jeton.P1 : Jeton.P2;
                 return true;
             }
             else
@@ -52,138 +55,178 @@ namespace BackMarvelVSCapman.Business.Gameplay
             }
         }
 
-        private WIN_RESULT WinResColLin(int line, int col)
+        private WIN_RESULT TestGridFull()
         {
-            int nbPlay = 0;
-            int cptLP1;
-            int cptLP2;
-            for (int i = 0; i < line; i++)
+            for(int i = 0; i < NB_COL; i++)
             {
-                cptLP1 = 0;
-                cptLP2 = 0;
-                for (int j = 0; j < col; j++)
+                if(TabBoard[i, NB_LIN - 1] == Jeton.EMPTY)
                 {
-                    if (TabBoard[i * NB_COL + j] != Jeton.EMPTY)
+                    return WIN_RESULT.NOT_WIN;
+                }
+            }
+            return WIN_RESULT.NULL;
+        }
+
+        private WIN_RESULT WinCol()
+        {
+            //compte le nombre de jetons alignes
+            int nbJetonsAligne = 0;
+            //jeton aligne actuel
+            Jeton jetonActuel = Jeton.EMPTY;
+
+            var win = WIN_RESULT.NOT_WIN;
+
+            if (NB_LIN >= 4)
+            {
+                for(int i = 0; i<NB_COL && nbJetonsAligne<4; i++)
+                {
+                    nbJetonsAligne = 1;
+                    for(int j = 0; j < NB_LIN && nbJetonsAligne < 4; j++)
                     {
-                        nbPlay++;
-                        if (TabBoard[i * NB_COL + j] == Jeton.P1)
+                        if (jetonActuel != Jeton.EMPTY && TabBoard[i, j] == jetonActuel)
                         {
-                            cptLP1++;
-                            cptLP2 = 0;
+                            nbJetonsAligne++;
                         }
                         else
                         {
-                            cptLP2++;
-                            cptLP1=0;
+                            jetonActuel = TabBoard[i, j];
+                            nbJetonsAligne = 1;
                         }
                     }
-                    if (cptLP1 > 3)
-                    {
-                        return WIN_RESULT.P1;
-                    }
-                    if (cptLP2 > 3)
-                    {
-                        return WIN_RESULT.P2;
-                    }
                 }
+                
             }
-            if(nbPlay == TabBoard.Length - 1)
+
+            if(nbJetonsAligne == 4)
             {
-                return WIN_RESULT.NULL;
+                if (jetonActuel == Jeton.P1)
+                {
+                    win = WIN_RESULT.P1;
+                }
+                if (jetonActuel == Jeton.P2)
+                {
+                    win = WIN_RESULT.P2;
+                }
+
             }
-            return WIN_RESULT.NOT_WIN;
+
+            return win;
         }
 
-        private WIN_RESULT WinDiagL()
+        private WIN_RESULT WinLin()
         {
-            int cptLP1;
-            int cptLP2;
-            for (int a = -2; a < 4; a++)
-            {
-                cptLP1 = 0;
-                cptLP2 = 0;
-                int maxL = a < 0 ? NB_LIN-1 + a+1 : NB_LIN-1;
-                int minL = a < 0 ? 0 : a;
+            //compte le nombre de jetons alignes
+            int nbJetonsAligne = 0;
+            //jeton aligne actuel
+            Jeton jetonActuel = Jeton.EMPTY;
 
-                for (int i = minL; i<= maxL; i++)
+            var win = WIN_RESULT.NOT_WIN;
+
+            if (NB_COL >= 4)
+            {
+                for (int j = 0; j < NB_LIN && nbJetonsAligne < 4; j++)
                 {
-                    var elem = TabBoard[i * NB_COL + i - a];
-                    if(elem != Jeton.EMPTY)
+                    nbJetonsAligne = 1;
+                    for (int i = 0; i < NB_COL && nbJetonsAligne < 4; i++)
                     {
-                        if(elem == Jeton.P1)
+                        if (jetonActuel != Jeton.EMPTY && TabBoard[i, j] == jetonActuel)
                         {
-                            cptLP1++;
-                            cptLP2 = 0;
+                            nbJetonsAligne++;
                         }
                         else
                         {
-                            cptLP2++;
-                            cptLP1 = 0;
+                            jetonActuel = TabBoard[i, j];
+                            nbJetonsAligne = 1;
                         }
                     }
-                    if (cptLP1 > 3)
-                    {
-                        return WIN_RESULT.P1;
-                    }
-                    if (cptLP2 > 3)
-                    {
-                        return WIN_RESULT.P2;
-                    }
                 }
-            }
-            return WIN_RESULT.NOT_WIN;
-        }
 
+            }
+
+            if (nbJetonsAligne == 4)
+            {
+                if (jetonActuel == Jeton.P1)
+                {
+                    win = WIN_RESULT.P1;
+                }
+                if (jetonActuel == Jeton.P2)
+                {
+                    win =  WIN_RESULT.P2;
+                }
+
+            }
+
+            return win;
+        }
         private WIN_RESULT WinDiagR()
         {
-            int cptLP1;
-            int cptLP2;
-            for (int a = -2; a < 4; a++)
-            {
-                cptLP1 = 0;
-                cptLP2 = 0;
-                int maxL = a < 2 ? NB_LIN-1 : NB_LIN - a;
-                int minL = a < 0 ? -a : 0;
-                for (int i = minL; i <= maxL; i++)
-                {
+            WIN_RESULT win= WIN_RESULT.NOT_WIN;
 
-                    var elem = TabBoard[i * NB_COL - i - a+NB_LIN];
-                    if (elem != Jeton.EMPTY)
-                    {
-                        if (elem == Jeton.P1)
+            for(int i = 0; i < NB_COL-3; i++)
+            {
+                for(int j=0; j < NB_LIN-3; j++)
+                {
+                    Jeton jeton = TabBoard[i, j];
+                    for(int k = 1; k < 4 && TabBoard[i+k, j+k] == jeton ; k++){
+                        if(k == 3)
                         {
-                            cptLP1++;
-                            cptLP2 = 0;
+                            if (jeton == Jeton.P1)
+                            {
+                                win = WIN_RESULT.P1;
+                            }
+                            if (jeton == Jeton.P2)
+                            {
+                                win = WIN_RESULT.P2;
+                            }
+                            return win;
                         }
-                        else
-                        {
-                            cptLP2++;
-                            cptLP1 = 0;
-                        }
-                    }
-                    if (cptLP1 > 3)
-                    {
-                        return WIN_RESULT.P1;
-                    }
-                    if (cptLP2 > 3)
-                    {
-                        return WIN_RESULT.P2;
                     }
                 }
             }
-            return WIN_RESULT.NOT_WIN;
+            return win;
         }
+        
+        private WIN_RESULT WinDiagL() {
+            WIN_RESULT win = WIN_RESULT.NOT_WIN;
+
+            for (int i = 3; i < NB_COL; i++)
+            {
+                for (int j = 0; j < NB_LIN - 3; j++)
+                {
+                    Jeton jeton = TabBoard[i, j];
+                    for (int k = 1; k < 4 && TabBoard[i - k, j + k] == jeton; k++)
+                    {
+                        if (k == 3)
+                        {
+                            if (jeton == Jeton.P1)
+                            {
+                                win = WIN_RESULT.P1;
+                            }
+                            if (jeton == Jeton.P2)
+                            {
+                                win = WIN_RESULT.P2;
+                            }
+                            return win;
+                        }
+                    }
+                }
+            }
+            return win;
+        }
+
+        
 
         public WIN_RESULT CheckWin()
         {
-            //line
-            var win = WinResColLin(NB_LIN, NB_COL);
-            //col
-            if(win == WIN_RESULT.NOT_WIN)
-            {
-                win = WinResColLin(NB_LIN, NB_COL);
-            }
+
+            var win = WinCol();
+            Console.WriteLine(win);
+
             if (win == WIN_RESULT.NOT_WIN)
+            {
+                win = WinLin();
+            }
+            if(win == WIN_RESULT.NOT_WIN)
             {
                 win = WinDiagL();
             }
@@ -191,10 +234,12 @@ namespace BackMarvelVSCapman.Business.Gameplay
             {
                 win = WinDiagR();
             }
+            if (win == WIN_RESULT.NOT_WIN)
+            {
+                win = TestGridFull();
+            }
 
             return win;
-            //diagL todo 
-            //diagR todo
         }
     }
 }
