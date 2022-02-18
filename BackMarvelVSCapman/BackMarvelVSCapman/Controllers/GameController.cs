@@ -45,7 +45,7 @@ namespace BackMarvelVSCapman.Controllers
                 return Ok(
                     new BoardDto
                     {
-                        Board = FindById(gameId).RawBoard.Cast<int>().ToArray(),
+                        Board = FindById(gameId).BoardInt,
                         NbCol = Board.NB_COL,
                         NbLin = Board.NB_LIN
                     }

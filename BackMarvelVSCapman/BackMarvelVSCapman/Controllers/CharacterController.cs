@@ -60,9 +60,9 @@ namespace BackMarvelVSCapman.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> Put([FromBody] Character value)
+        public async Task<IActionResult> Put([FromBody] CharacterDto value)
         {
-            return await _characterRepository.Update(value) ? Accepted() : Conflict(value);
+            return await _characterRepository.Update(_mapper.Map<CharacterDto, Character>(value)) ? Accepted() : Conflict(value);
         }
 
         // DELETE api/<CharacterController>/5

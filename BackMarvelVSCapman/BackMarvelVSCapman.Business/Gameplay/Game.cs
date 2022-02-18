@@ -13,7 +13,7 @@ namespace BackMarvelVSCapman.Business.Gameplay
         private Guid _nextPlayerToPlay { get; set; }
 
         private Board _board;
-        public Token[,] RawBoard => _board.TabBoard;
+        public int[][] BoardInt => _board.getBoardInt();
 
         private bool _isP2Join = false;
 
