@@ -15,7 +15,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 import * as moment from 'moment';
 
-export const API_BASE_URL = new OpaqueToken('API_BASE_URL');
+// export const API_BASE_URL = new OpaqueToken('API_BASE_URL');
 
 @Injectable()
 export class ServiceProxy {
