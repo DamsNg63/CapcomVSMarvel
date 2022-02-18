@@ -31,9 +31,8 @@ namespace BackMarvelVSCapman.DAL.Repository
             return await _dbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> Update(T elem)
+        public virtual async Task<bool> Update(T elem)
         {
-            _dbSet.Update(elem);
             return await _dbContext.SaveChangesAsync() > 0;
         }
 

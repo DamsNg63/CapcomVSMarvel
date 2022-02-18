@@ -19,5 +19,19 @@ namespace BackMarvelVSCapman.DAL.Repository
             // TODO: exception if not found
             return await _dbSet.FirstAsync(x => x.TeamId == id);
         }
+
+        public override async Task<bool> Update(Team elem)
+        {
+            var team = await Get(elem.TeamId);
+
+            if (team == null)
+            {
+                throw new DbUpdateException("Team with this ID does not exist.");
+            }
+
+            team.Name = elem.Name;
+          
+            return await base.Update(team);
+        }
     }
 }
