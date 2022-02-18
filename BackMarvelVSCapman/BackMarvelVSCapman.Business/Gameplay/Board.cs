@@ -71,9 +71,10 @@ namespace BackMarvelVSCapman.Business.Gameplay
 
         private WIN_RESULT WinCol()
         {
-            //compte le nombre de jetons alignes
+            //count the number of aligned tokens
             int nbAlignedTokens = 0;
-            //jeton aligne actuel
+
+            //token actual in count
             Token currentToken = Token.EMPTY;
 
             var win = WIN_RESULT.NOT_WIN;
@@ -99,17 +100,9 @@ namespace BackMarvelVSCapman.Business.Gameplay
 
             }
 
-            if (nbAlignedTokens == 4)
+            if (nbAlignedTokens == 4 && currentToken!=Token.EMPTY)
             {
-                if (currentToken == Token.P1)
-                {
-                    win = WIN_RESULT.P1;
-                }
-                if (currentToken == Token.P2)
-                {
-                    win = WIN_RESULT.P2;
-                }
-
+                win = currentToken == Token.P1 ? WIN_RESULT.P1 : WIN_RESULT.P2;
             }
 
             return win;
@@ -117,9 +110,10 @@ namespace BackMarvelVSCapman.Business.Gameplay
 
         private WIN_RESULT WinLin()
         {
-            //compte le nombre de jetons alignes
+            //count the number of aligned tokens
             int nbAlignedTokens = 0;
-            //jeton aligne actuel
+
+            //token actual in count
             Token currentToken = Token.EMPTY;
 
             var win = WIN_RESULT.NOT_WIN;
