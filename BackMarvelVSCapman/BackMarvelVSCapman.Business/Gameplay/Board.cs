@@ -209,5 +209,22 @@ namespace BackMarvelVSCapman.Business.Gameplay
 
             return win;
         }
+
+
+        public int[][] getBoardInt()
+        {
+            int[][] array = new int[NB_COL][];
+
+            for (int i = 0; i<NB_COL; i++)
+            {
+                array[i]= new int[NB_LIN];
+                for(int j=0; j<NB_LIN; j++)
+                {
+                    array[i][j] = (int)TabBoard[i,j];
+                }
+            }
+
+            return array;
+        }
     }
 }

@@ -121,5 +121,28 @@ namespace MSTest
 
             Assert.AreEqual(WIN_RESULT.NULL, board.CheckWin());
         }
+
+        [TestMethod]
+        public void TestGetIntArray()
+        {
+            Board board = new Board();
+
+            int[][] array = board.getBoardInt();
+            foreach (int[] i in array)
+            {
+                foreach (int j in i)
+                {
+                    Assert.AreEqual(j, 0);
+                }
+            }
+
+            board.Play(1, true);
+            board.Play(1, false);
+            array = board.getBoardInt();
+
+            Assert.AreEqual(array[0][0], 0);
+            Assert.AreEqual(array[1][0], 1);
+            Assert.AreEqual(array[1][1], 2);
+        }
     }
 }
