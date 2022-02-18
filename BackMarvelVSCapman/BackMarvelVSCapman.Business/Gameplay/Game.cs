@@ -13,6 +13,7 @@ namespace BackMarvelVSCapman.Business.Gameplay
         private Guid _nextPlayerToPlay { get; set; }
 
         private Board _board;
+        public Token[,] RawBoard => _board.TabBoard;
 
         private bool _isP2Join = false;
 
@@ -35,7 +36,15 @@ namespace BackMarvelVSCapman.Business.Gameplay
 
         public Player Find(Guid playerId)
         {
-            return Players.P1.PlayerId == playerId ? Players.P1 : Players.P2;
+            bool isP1 = Players.P1.PlayerId == playerId;
+            bool isP2 = Players.P2.PlayerId == playerId;
+
+            if (!isP1 && !isP2)
+            {
+                throw new ArgumentException("Wrong player ID.");
+            }
+
+            return isP1 ? Players.P1 : Players.P2;
         }
 
         public bool CanPlay(Guid playerId)
@@ -46,26 +55,18 @@ namespace BackMarvelVSCapman.Business.Gameplay
         public bool Play(Guid playerId, int col)
         {
             var player = Find(playerId);
+
             if (_nextPlayerToPlay == player.PlayerId && IsGameReady)
             {
                 var played = _board.Play(col, player.PlayerId == Players.P1.PlayerId);
                 if (played)
                 {
-                    if (_nextPlayerToPlay == Players.P1.PlayerId)
-                    {
-                        _nextPlayerToPlay = Players.P2.PlayerId;
-                    }
-                    else
-                    {
-                        _nextPlayerToPlay = Players.P1.PlayerId;
-                    }
+                    _nextPlayerToPlay = _nextPlayerToPlay == Players.P1.PlayerId ? Players.P2.PlayerId : Players.P1.PlayerId;
                 }
                 return played;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
 
         public WIN_RESULT GetWinResult()
@@ -76,11 +77,6 @@ namespace BackMarvelVSCapman.Business.Gameplay
         public bool Equals(Game? other)
         {
             return GameId.Equals(other?.GameId);
-        }
-
-        public Token[,] GetBoard()
-        {
-            return _board.TabBoard;
         }
     }
 }

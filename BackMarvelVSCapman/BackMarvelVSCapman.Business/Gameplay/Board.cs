@@ -42,7 +42,8 @@ namespace BackMarvelVSCapman.Business.Gameplay
         public bool Play(int col, bool isPlayer1)
         {
             int i = 0;
-            while (TabBoard[col, i] != Token.EMPTY && i < NB_LIN)
+
+            while (i < NB_LIN && TabBoard[col, i] != Token.EMPTY)
             {
                 i++;
             }
@@ -51,10 +52,8 @@ namespace BackMarvelVSCapman.Business.Gameplay
                 TabBoard[col, i] = isPlayer1 ? Token.P1 : Token.P2;
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
 
         private WIN_RESULT TestGridFull()

@@ -43,13 +43,13 @@ namespace BackMarvelVSCapman.Controllers
             try
             {
                 return Ok(
-                        new BoardDto
-                        {
-                            Board = FindById(gameId).GetBoard().Cast<int>().ToArray(),
-                            NbCol = Board.NB_COL,
-                            NbLin = Board.NB_LIN
-                        }
-                    );
+                    new BoardDto
+                    {
+                        Board = FindById(gameId).RawBoard.Cast<int>().ToArray(),
+                        NbCol = Board.NB_COL,
+                        NbLin = Board.NB_LIN
+                    }
+                );
             }
             catch (Exception)
             {
@@ -149,7 +149,6 @@ namespace BackMarvelVSCapman.Controllers
 
         private Game FindById(string gameId)
         {
-            // TODO: exception if game not found
             return _gameManager.Games.First(x => x.GameId.ToString() == gameId);
         }
     }

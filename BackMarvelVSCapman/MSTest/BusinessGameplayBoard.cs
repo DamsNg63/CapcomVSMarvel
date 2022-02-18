@@ -8,6 +8,19 @@ namespace MSTest
     public class BusinessGameplayBoard
     {
         [TestMethod]
+        public void TestPlay()
+        {
+            Board board = new Board();
+            board.Play(1, true);
+            for (int i = 0; i < 6; i++)
+            {
+                Assert.IsTrue(board.Play(2, true));
+            }
+            //Assert.IsFalse(board.Play(2, true));
+        }
+
+
+        [TestMethod]
         public void TestWinCol()
         {
             Board board = new Board();
