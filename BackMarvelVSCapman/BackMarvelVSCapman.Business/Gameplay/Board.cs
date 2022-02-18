@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BackMarvelVSCapman.Business.Gameplay
 {
-    public enum Jeton
+    public enum Token
     {
         EMPTY = 0,
         P1 = 1,
@@ -21,18 +21,20 @@ namespace BackMarvelVSCapman.Business.Gameplay
     }
     public class Board
     {
-        public Jeton[,] TabBoard { get; }
+        private delegate WIN_RESULT CheckFunc();
+
+        public Token[,] TabBoard { get; }
         public const int NB_COL = 7;
         public const int NB_LIN = 6;
 
         public Board()
         {
-            TabBoard = new Jeton[NB_COL, NB_LIN];
-            for(int i = 0; i < NB_COL; i++)
+            TabBoard = new Token[NB_COL, NB_LIN];
+            for (int i = 0; i < NB_COL; i++)
             {
-                for(int j = 0; j < NB_LIN; j++)
+                for (int j = 0; j < NB_LIN; j++)
                 {
-                    TabBoard[i, j] = Jeton.EMPTY;
+                    TabBoard[i, j] = Token.EMPTY;
                 }
             }
         }
@@ -40,13 +42,13 @@ namespace BackMarvelVSCapman.Business.Gameplay
         public bool Play(int col, bool isPlayer1)
         {
             int i = 0;
-            while(TabBoard[col, i] != Jeton.EMPTY && i < NB_LIN)
+            while (TabBoard[col, i] != Token.EMPTY && i < NB_LIN)
             {
                 i++;
             }
-            if(i < NB_LIN)
+            if (i < NB_LIN)
             {
-                TabBoard[col, i] = isPlayer1 ? Jeton.P1 : Jeton.P2;
+                TabBoard[col, i] = isPlayer1 ? Token.P1 : Token.P2;
                 return true;
             }
             else
@@ -57,9 +59,9 @@ namespace BackMarvelVSCapman.Business.Gameplay
 
         private WIN_RESULT TestGridFull()
         {
-            for(int i = 0; i < NB_COL; i++)
+            for (int i = 0; i < NB_COL; i++)
             {
-                if(TabBoard[i, NB_LIN - 1] == Jeton.EMPTY)
+                if (TabBoard[i, NB_LIN - 1] == Token.EMPTY)
                 {
                     return WIN_RESULT.NOT_WIN;
                 }
@@ -70,40 +72,40 @@ namespace BackMarvelVSCapman.Business.Gameplay
         private WIN_RESULT WinCol()
         {
             //compte le nombre de jetons alignes
-            int nbJetonsAligne = 0;
+            int nbAlignedTokens = 0;
             //jeton aligne actuel
-            Jeton jetonActuel = Jeton.EMPTY;
+            Token currentToken = Token.EMPTY;
 
             var win = WIN_RESULT.NOT_WIN;
 
             if (NB_LIN >= 4)
             {
-                for(int i = 0; i<NB_COL && nbJetonsAligne<4; i++)
+                for (int i = 0; i < NB_COL && nbAlignedTokens < 4; i++)
                 {
-                    nbJetonsAligne = 1;
-                    for(int j = 0; j < NB_LIN && nbJetonsAligne < 4; j++)
+                    nbAlignedTokens = 1;
+                    for (int j = 0; j < NB_LIN && nbAlignedTokens < 4; j++)
                     {
-                        if (jetonActuel != Jeton.EMPTY && TabBoard[i, j] == jetonActuel)
+                        if (currentToken != Token.EMPTY && TabBoard[i, j] == currentToken)
                         {
-                            nbJetonsAligne++;
+                            nbAlignedTokens++;
                         }
                         else
                         {
-                            jetonActuel = TabBoard[i, j];
-                            nbJetonsAligne = 1;
+                            currentToken = TabBoard[i, j];
+                            nbAlignedTokens = 1;
                         }
                     }
                 }
-                
+
             }
 
-            if(nbJetonsAligne == 4)
+            if (nbAlignedTokens == 4)
             {
-                if (jetonActuel == Jeton.P1)
+                if (currentToken == Token.P1)
                 {
                     win = WIN_RESULT.P1;
                 }
-                if (jetonActuel == Jeton.P2)
+                if (currentToken == Token.P2)
                 {
                     win = WIN_RESULT.P2;
                 }
@@ -116,97 +118,75 @@ namespace BackMarvelVSCapman.Business.Gameplay
         private WIN_RESULT WinLin()
         {
             //compte le nombre de jetons alignes
-            int nbJetonsAligne = 0;
+            int nbAlignedTokens = 0;
             //jeton aligne actuel
-            Jeton jetonActuel = Jeton.EMPTY;
+            Token currentToken = Token.EMPTY;
 
             var win = WIN_RESULT.NOT_WIN;
 
             if (NB_COL >= 4)
             {
-                for (int j = 0; j < NB_LIN && nbJetonsAligne < 4; j++)
+                for (int j = 0; j < NB_LIN && nbAlignedTokens < 4; j++)
                 {
-                    nbJetonsAligne = 1;
-                    for (int i = 0; i < NB_COL && nbJetonsAligne < 4; i++)
+                    nbAlignedTokens = 1;
+                    for (int i = 0; i < NB_COL && nbAlignedTokens < 4; i++)
                     {
-                        if (jetonActuel != Jeton.EMPTY && TabBoard[i, j] == jetonActuel)
+                        if (currentToken != Token.EMPTY && TabBoard[i, j] == currentToken)
                         {
-                            nbJetonsAligne++;
+                            nbAlignedTokens++;
                         }
                         else
                         {
-                            jetonActuel = TabBoard[i, j];
-                            nbJetonsAligne = 1;
+                            currentToken = TabBoard[i, j];
+                            nbAlignedTokens = 1;
                         }
                     }
                 }
 
             }
 
-            if (nbJetonsAligne == 4)
+            if (nbAlignedTokens == 4)
             {
-                if (jetonActuel == Jeton.P1)
-                {
-                    win = WIN_RESULT.P1;
-                }
-                if (jetonActuel == Jeton.P2)
-                {
-                    win =  WIN_RESULT.P2;
-                }
-
+                win = currentToken == Token.P1 ? WIN_RESULT.P1 : WIN_RESULT.P2;
             }
 
             return win;
         }
         private WIN_RESULT WinDiagR()
         {
-            WIN_RESULT win= WIN_RESULT.NOT_WIN;
+            WIN_RESULT win = WIN_RESULT.NOT_WIN;
 
-            for(int i = 0; i < NB_COL-3; i++)
+            for (int i = 0; i < NB_COL - 3; i++)
             {
-                for(int j=0; j < NB_LIN-3; j++)
+                for (int j = 0; j < NB_LIN - 3; j++)
                 {
-                    Jeton jeton = TabBoard[i, j];
-                    for(int k = 1; k < 4 && TabBoard[i+k, j+k] == jeton ; k++){
-                        if(k == 3)
+                    Token token = TabBoard[i, j];
+                    for (int k = 1; k < 4 && TabBoard[i + k, j + k] == token; k++)
+                    {
+                        if (k == 3 && token != Token.EMPTY)
                         {
-                            if (jeton == Jeton.P1)
-                            {
-                                win = WIN_RESULT.P1;
-                            }
-                            if (jeton == Jeton.P2)
-                            {
-                                win = WIN_RESULT.P2;
-                            }
-                            return win;
+                            return token == Token.P1 ? WIN_RESULT.P1 : WIN_RESULT.P2;
                         }
                     }
                 }
             }
             return win;
         }
-        
-        private WIN_RESULT WinDiagL() {
+
+        private WIN_RESULT WinDiagL()
+        {
             WIN_RESULT win = WIN_RESULT.NOT_WIN;
 
             for (int i = 3; i < NB_COL; i++)
             {
                 for (int j = 0; j < NB_LIN - 3; j++)
                 {
-                    Jeton jeton = TabBoard[i, j];
-                    for (int k = 1; k < 4 && TabBoard[i - k, j + k] == jeton; k++)
+                    Token token = TabBoard[i, j];
+                    for (int k = 1; k < 4 && TabBoard[i - k, j + k] == token; k++)
                     {
-                        if (k == 3)
+                        if (k == 3 && token != Token.EMPTY)
                         {
-                            if (jeton == Jeton.P1)
-                            {
-                                win = WIN_RESULT.P1;
-                            }
-                            if (jeton == Jeton.P2)
-                            {
-                                win = WIN_RESULT.P2;
-                            }
-                            return win;
+                            return token == Token.P1 ? WIN_RESULT.P1 : WIN_RESULT.P2;
                         }
                     }
                 }
@@ -214,29 +194,24 @@ namespace BackMarvelVSCapman.Business.Gameplay
             return win;
         }
 
-        
+
 
         public WIN_RESULT CheckWin()
         {
+            var win = WIN_RESULT.NOT_WIN;
 
-            var win = WinCol();
-            Console.WriteLine(win);
+            CheckFunc[] array =
+            {
+                WinCol,
+                WinLin,
+                WinDiagL,
+                WinDiagR,
+                TestGridFull
+            };
 
-            if (win == WIN_RESULT.NOT_WIN)
+            for (int i = 0; i < array.Length && win == WIN_RESULT.NOT_WIN; ++i)
             {
-                win = WinLin();
-            }
-            if(win == WIN_RESULT.NOT_WIN)
-            {
-                win = WinDiagL();
-            }
-            if (win == WIN_RESULT.NOT_WIN)
-            {
-                win = WinDiagR();
-            }
-            if (win == WIN_RESULT.NOT_WIN)
-            {
-                win = TestGridFull();
+                win = array[i]();
             }
 
             return win;
