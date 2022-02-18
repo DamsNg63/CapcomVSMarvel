@@ -57,9 +57,9 @@ namespace BackMarvelVSCapman.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        public async Task<IActionResult> Put([FromBody] Team value)
+        public async Task<IActionResult> Put([FromBody] TeamDto value)
         {
-            return await _teamRepository.Update(value) ? Accepted() : Conflict();
+            return await _teamRepository.Update(_mapper.Map<TeamDto, Team>(value)) ? Accepted() : Conflict();
         }
 
         // DELETE api/<TeamController>/5

@@ -15,8 +15,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<Context>();
 builder.Services.AddSingleton<Context>();
-builder.Services.AddSingleton<IRepository<Character>, CharacterRepository>();
-builder.Services.AddSingleton<IRepository<Team>, TeamRepository>();
+builder.Services.AddScoped<IRepository<Character>, CharacterRepository>();
+builder.Services.AddScoped<IRepository<Team>, TeamRepository>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddSingleton<IGameManager, GameManager>();
 
@@ -48,8 +48,10 @@ var config = new MapperConfiguration(cfg =>
 {
     cfg.CreateMap<Character, CreateChraraterDto>();
     cfg.CreateMap<Character, CharacterDto>();
+    cfg.CreateMap<CharacterDto, Character>();
     cfg.CreateMap<Game, GameDto>();
     cfg.CreateMap<Team, TeamDto>();
+    cfg.CreateMap<TeamDto, Team>();
 });
 var mapper = new Mapper(config);
 
