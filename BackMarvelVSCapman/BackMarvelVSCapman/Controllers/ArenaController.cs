@@ -17,7 +17,7 @@ namespace BackMarvelVSCapman.Controllers
             _arenaRepository = arenaRepository;
         }
 
-        [HttpGet]
+        [HttpGet("getAll")]
         [ProducesResponseType(typeof(IEnumerable<ArenaDto>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get()
         {
