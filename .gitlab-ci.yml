@@ -7,6 +7,7 @@ deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
     - docker build -f "BackMarvelVSCapman/BackMarvelVSCapman/Dockerfile" --force-rm -t backmarvelvscapman:latest "BackMarvelVSCapman" 
+    - docker build -f "front-marvel-vs-capcom/Dockerfile" --force-rm -t frontmarvelvscapman:latest "front-marvel-vs-capcom" 
     - docker-compose up -d
   only:
     - develop
