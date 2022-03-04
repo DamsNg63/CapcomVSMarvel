@@ -22,7 +22,7 @@ namespace BackMarvelVSCapman.Controllers
             _characterRepository = characterRepository;
         }
         // GET: api/<CharacterController>
-        [HttpGet]
+        [HttpGet("getAll")]
         [ProducesResponseType(typeof(IEnumerable<CharacterDto>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<IActionResult> Get()

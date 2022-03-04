@@ -20,7 +20,7 @@ namespace BackMarvelVSCapman.Controllers
             _teamRepository = teamRepository;
         }
         // GET: api/<TeamController>
-        [HttpGet]
+        [HttpGet("getAll")]
         [ProducesResponseType(typeof(IEnumerable<TeamDto>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get()
         {
