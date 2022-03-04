@@ -6,12 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { InviteCodeComponent } from './invite-code/invite-code.component';
+import { Power4Component } from './power4/power4.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    InviteCodeComponent
+    InviteCodeComponent,
+    Power4Component
   ],
   imports: [
     BrowserModule,

@@ -17,6 +17,7 @@ export class InviteCodeComponent implements OnInit {
   playerId = ''
   joinUrl = 'wait'
   showalert = false;
+  gameReady = false;
 
   constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {
     this.api = new GameServiceProxy(http, environment.baseUrl)
@@ -26,7 +27,12 @@ export class InviteCodeComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.gameId = params['gameId'];
       this.joinUrl = environment.hostUrl + '/#/invite?gameId=' + params['gameId']
-      this.playerId = params['playerId']
+      this.playerId = params['playerId'];
+      interval(2500)
+          .pipe(takeWhile(() => !this.gameReady))
+          .subscribe(() => {
+            this.checkReady()
+          });
     })
     if (this.playerId == undefined) {
       this.api.join(this.gameId).subscribe(data => {
@@ -51,6 +57,15 @@ export class InviteCodeComponent implements OnInit {
     document.execCommand('copy');
     document.body.removeChild(selBox);
     setTimeout(() => this.showalert = false, 7000);
+  }
+
+  checkReady(){
+    this.api.ready(this.gameId).subscribe(data => {
+      if (data === true){
+        this.gameReady = true;
+        this.router.navigate(['/game'], {queryParams:{gameId: this.gameId, playerId: this.playerId}})
+      }
+    })
   }
 
 }
