@@ -127,7 +127,7 @@ namespace MSTest
         {
             Board board = new Board();
 
-            int[][] array = board.getBoardInt();
+            int[][] array = board.GetBoardInt();
             foreach (int[] i in array)
             {
                 foreach (int j in i)
@@ -138,7 +138,7 @@ namespace MSTest
 
             board.Play(1, true);
             board.Play(1, false);
-            array = board.getBoardInt();
+            array = board.GetBoardInt();
 
             Assert.AreEqual(array[0][0], 0);
             Assert.AreEqual(array[1][0], 1);

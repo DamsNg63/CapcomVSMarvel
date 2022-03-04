@@ -46,6 +46,9 @@ builder.Services.AddSession(options =>
 #region Automapper
 var config = new MapperConfiguration(cfg =>
 {
+    cfg.CreateMap<Arena, CreateArenaDto>();
+    cfg.CreateMap<Arena, ArenaDto>();
+    cfg.CreateMap<ArenaDto, Arena>();
     cfg.CreateMap<Character, CreateChraraterDto>();
     cfg.CreateMap<Character, CharacterDto>();
     cfg.CreateMap<CharacterDto, Character>();

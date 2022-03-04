@@ -16,7 +16,6 @@ namespace BackMarvelVSCapman.DAL.Repository
 
         public override async Task<Character> Get(int id)
         {
-            // TODO: exception if not found
             return await _dbSet.FirstAsync(x => x.CharacterId == id);
         }
 
