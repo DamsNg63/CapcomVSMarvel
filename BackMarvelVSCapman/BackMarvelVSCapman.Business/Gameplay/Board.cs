@@ -187,8 +187,6 @@ namespace BackMarvelVSCapman.Business.Gameplay
             return win;
         }
 
-
-
         public WIN_RESULT CheckWin()
         {
             var win = WIN_RESULT.NOT_WIN;
@@ -210,8 +208,7 @@ namespace BackMarvelVSCapman.Business.Gameplay
             return win;
         }
 
-
-        public int[][] getBoardInt()
+        public int[][] GetBoardInt()
         {
             int[][] array = new int[NB_COL][];
 

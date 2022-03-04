@@ -7,6 +7,7 @@ namespace BackMarvelVSCapman.DAL
     {
         public DbSet<Character> Characters { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<Arena> Arenas { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
