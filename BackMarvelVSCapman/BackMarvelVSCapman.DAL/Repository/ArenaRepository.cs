@@ -28,9 +28,8 @@ namespace BackMarvelVSCapman.DAL.Repository
                 throw new DbUpdateException("Arena with this ID does not exist.");
             }
 
-            elem.ArenaId = arena.ArenaId;
-            elem.Name = arena.Name;
-            elem.Image = arena.Image;
+            arena.Name = elem.Name;
+            arena.Image = elem.Image;
 
             return await base.Update(elem);
         }

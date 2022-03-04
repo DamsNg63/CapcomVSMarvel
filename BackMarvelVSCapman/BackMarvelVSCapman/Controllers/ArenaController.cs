@@ -11,7 +11,6 @@ namespace BackMarvelVSCapman.Controllers
     [ApiController]
     public class ArenaController : BaseController
     {
-
         private readonly IRepository<Arena> _arenaRepository;
 
         public ArenaController( IRepository<Arena> arenaRepository, IMapper mapper) : base(mapper) { 
@@ -50,6 +49,21 @@ namespace BackMarvelVSCapman.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.Accepted)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        public async Task<IActionResult> Put([FromBody] ArenaDto value)
+        {
+            return await _arenaRepository.Update(_mapper.Map<ArenaDto, Arena>(value)) ? Accepted() : Conflict(value);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            return await _arenaRepository.Delete(id) ? Ok() : BadRequest();
+        }
     }
 
 
