@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  baseUrl: "https://backmarvelvscapman.douard.me",
+  hostUrl: "https://marvelvscapman.douard.me",
 };
