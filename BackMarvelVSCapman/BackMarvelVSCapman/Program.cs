@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<Context>();
 builder.Services.AddSingleton<Context>();
 builder.Services.AddScoped<IRepository<Character>, CharacterRepository>();
+builder.Services.AddScoped<IRepository<Arena>, ArenaRepository>();
 builder.Services.AddScoped<IRepository<Team>, TeamRepository>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddSingleton<IGameManager, GameManager>();
@@ -47,6 +48,7 @@ builder.Services.AddSession(options =>
 var config = new MapperConfiguration(cfg =>
 {
     cfg.CreateMap<Arena, CreateArenaDto>();
+    cfg.CreateMap<CreateArenaDto, Arena>();
     cfg.CreateMap<Arena, ArenaDto>();
     cfg.CreateMap<ArenaDto, Arena>();
     cfg.CreateMap<Character, CreateChraraterDto>();
