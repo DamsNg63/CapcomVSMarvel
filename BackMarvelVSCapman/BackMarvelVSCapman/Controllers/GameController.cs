@@ -21,6 +21,22 @@ namespace BackMarvelVSCapman.Controllers
             _characterRepository = characterRepository;
         }
 
+        [HttpGet("playAgain")]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.NotFound)]
+        public IActionResult PlayAgain(string gameId)
+        {
+            try
+            {
+                FindById(gameId).Reset();
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return NotFound(gameId);
+            }
+        }
+
         [HttpGet("canplay")]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public IActionResult CanPlay(Guid playerId, string gameId)

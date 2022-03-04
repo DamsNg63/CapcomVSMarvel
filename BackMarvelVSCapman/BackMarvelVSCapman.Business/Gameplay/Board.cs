@@ -30,6 +30,11 @@ namespace BackMarvelVSCapman.Business.Gameplay
         public Board()
         {
             TabBoard = new Token[NB_COL, NB_LIN];
+            ClearBoard();
+        }
+
+        public void ClearBoard()
+        {
             for (int i = 0; i < NB_COL; i++)
             {
                 for (int j = 0; j < NB_LIN; j++)
@@ -99,7 +104,7 @@ namespace BackMarvelVSCapman.Business.Gameplay
 
             }
 
-            if (nbAlignedTokens == 4 && currentToken!=Token.EMPTY)
+            if (nbAlignedTokens == 4 && currentToken != Token.EMPTY)
             {
                 win = currentToken == Token.P1 ? WIN_RESULT.P1 : WIN_RESULT.P2;
             }
@@ -212,12 +217,12 @@ namespace BackMarvelVSCapman.Business.Gameplay
         {
             int[][] array = new int[NB_COL][];
 
-            for (int i = 0; i<NB_COL; i++)
+            for (int i = 0; i < NB_COL; i++)
             {
-                array[i]= new int[NB_LIN];
-                for(int j=0; j<NB_LIN; j++)
+                array[i] = new int[NB_LIN];
+                for (int j = 0; j < NB_LIN; j++)
                 {
-                    array[i][j] = (int)TabBoard[i,j];
+                    array[i][j] = (int)TabBoard[i, j];
                 }
             }
 

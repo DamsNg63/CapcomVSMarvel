@@ -8,6 +8,8 @@ namespace BackMarvelVSCapman.Business.Gameplay
 {
     public class Game
     {
+        private Guid _initialPlayer;
+
         public Guid GameId { get; }
         public (Player P1, Player P2) Players { get; set; }
         private Guid _nextPlayerToPlay { get; set; }
@@ -26,7 +28,14 @@ namespace BackMarvelVSCapman.Business.Gameplay
             GameId = Guid.NewGuid();
             Players = (p1, p2);
             _board = new Board();
-            _nextPlayerToPlay = p1.PlayerId;
+            _nextPlayerToPlay = _initialPlayer = p1.PlayerId;
+        }
+
+        public void Reset()
+        {
+            _board.ClearBoard();
+            _initialPlayer = Players.P1.PlayerId == _initialPlayer ? Players.P2.PlayerId : Players.P1.PlayerId;
+            _nextPlayerToPlay = _initialPlayer;
         }
 
         public void P2Join()
