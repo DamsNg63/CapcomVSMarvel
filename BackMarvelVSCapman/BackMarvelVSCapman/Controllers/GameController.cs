@@ -66,7 +66,7 @@ namespace BackMarvelVSCapman.Controllers
         }
 
         [HttpPut("join")]
-        [ProducesResponseType(typeof(BoardDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GameDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public IActionResult JoinGame(string gameId)
         {
