@@ -6,11 +6,11 @@
     <table class="content-center brand" *ngIf="board.board">
       <tr *ngFor="let i of range(board.nbLin-1, -1, -1)">
         <td *ngFor="let j of range(0,board.nbCol,  1)">
-          <button class="btn btn-info btn-icon btn-round" *ngIf="board.board[i * board.nbCol + j] === 0"
+          <button class="btn btn-info btn-icon btn-round" *ngIf="board.board[j][i] === 0"
             (click)="play(j)"></button>
-          <button class="btn btn-success btn-icon btn-round" *ngIf="board.board[i * board.nbCol + j] === 1"
+          <button class="btn btn-success btn-icon btn-round" *ngIf="board.board[j][i] === 1"
             (click)="play(j)"></button>
-          <button class="btn btn-danger btn-icon btn-round" *ngIf="board.board[i * board.nbCol + j] === 2"
+          <button class="btn btn-danger btn-icon btn-round" *ngIf="board.board[j][i] === 2"
             (click)="play(j)"></button>
         </td>
       </tr>
